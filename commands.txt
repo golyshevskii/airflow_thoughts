@@ -1,0 +1,40 @@
+# airflow setup without docker
+python3 -m venv venv
+
+pip install "apache-airflow[celery]==2.4.3" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.4.3/constraints-3.10.txt"
+
+export AIRFLOW_HOME=/Users/python_poseur/airflow_thoughts
+
+airflow db init (airflow db reset)
+
+airflow webserver -p 8080
+
+airflow users create --username admin --firstname python --lastname poseur --role Admi
+n --email admin@domain.com
+
+# new terminal
+
+export AIRFLOW_HOME=/Users/python_poseur/airflow_thoughts
+
+airflow scheduler
+
+----
+
+# airflow with docker
+
+curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.4.3/docker-compose.yaml'
+
+mkdir -p ./dags ./logs ./plugins
+
+# if Linux
+echo -e "AIRFLOW_UID=$(id -u)" > .env
+
+docker-compose up airflow-init
+
+docker-compose up -d
+
+docker ps
+
+docker exec -it {container_id} bash
+
+psql -U airflow
